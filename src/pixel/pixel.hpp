@@ -7,7 +7,7 @@ struct Point {
 
 class Pixel {
 private:
-    Point pos;
+    const Point pos;
 public:
     Pixel(Point pos);
     int getColor();

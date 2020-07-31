@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.17)
 
 project(test CXX)
 
+set(CMAKE_CXX_STANDARD 17)
+
 find_path(lib_header lib/winbgmim.hpp lib/keys_n_colors.hpp)
 find_library(lib_dll libwinbgim PATHS ${CMAKE_SOURCE_DIR}/lib)
 
