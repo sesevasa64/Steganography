@@ -4,6 +4,7 @@
 #include "config.hpp"
 #include "bitstream/bitsteam.hpp"
 #include "triad/triad.hpp"
+#include "converter/decrypter.hpp"
 #include "../lib/winbgim.hpp"
 
 using namespace std;
@@ -24,5 +25,6 @@ int main() {
     cout << ss.getStr() << endl;
     //Point p1(1, 2), p2(3, 4);
     //swap(p1, p2);
+    cout << ceil(double(byte_size) / minimum_bits) << endl;
     return 0;
 }

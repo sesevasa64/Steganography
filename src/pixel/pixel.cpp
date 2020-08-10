@@ -1,5 +1,11 @@
 #include "pixel.hpp"
 
+Pixel::Pixel() {}
+
+Pixel::Pixel(Pixel&& another) 
+: pos(another.pos), 
+  colors(another.colors) {}
+
 Pixel::Pixel(Point pos) : pos(pos) {
     auto color = getpixel(pos.x, pos.y);
     for(auto i : rgb) {

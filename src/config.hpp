@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 #include <numeric>
 
 const int width  = 800;
@@ -13,6 +14,8 @@ const int minimum_bits = std::lcm(bits_in_pixel, byte_size);
 
 const int pixel_size = minimum_bits / bits_in_pixel;
 const int chars_in_triad = minimum_bits / byte_size;
+
+const int ratio = ceil(double(byte_size) / minimum_bits);
 
 enum RGB {
     _RED   = 0,

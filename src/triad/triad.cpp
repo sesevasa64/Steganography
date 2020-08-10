@@ -1,10 +1,12 @@
 #include "triad.hpp"
 #include "../config.hpp"
 
-Triad::Triad(Pixels pixels, BitStream stream) 
-: pixels(pixels), stream(stream) {}
+Triad::Triad() : pixels() {}
 
-void Triad::decrypt() {
+Triad::Triad(Pixels& pixels) 
+: pixels(pixels) {}
+
+void Triad::decrypt(BitStream stream) {
     for(int i = 0; i < minimum_bits; i += bits_in_pixel) {
         auto colors = pixels[i].getColor();
         for(int j = 0; j < components; j++) {

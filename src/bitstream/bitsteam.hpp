@@ -19,8 +19,9 @@ private:
         bits.resize(size * byte_size);
         for(int i = 0; i < size; i++) {
             for(int k = 0; k < byte_size; k++) {
-                bits[i * byte_size + k] = (*(start++) >> k) & 1;
+                bits[i * byte_size + k] = (*start >> k) & 1;
             }
+            start++;
         }
     }
 public:
