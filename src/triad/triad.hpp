@@ -2,14 +2,16 @@
 #include <string>
 #include <vector>
 #include "../pixel/pixel.hpp"
+#include "../bitstream/bitsteam.hpp"
 
-typedef std::vector<Pixel> pixel_array;
+typedef std::vector<Pixel> Pixels;
 
 class Triad {
 private:
-    pixel_array array;
-    std::string text;
+    Pixels pixels;
+    BitStream stream;
 public:
-    Triad(pixel_array array, std::string text);
+    Triad(Pixels pixels, BitStream stream);
     void decrypt();
+    std::string encrypt();
 };
