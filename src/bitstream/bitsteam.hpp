@@ -12,12 +12,7 @@ class BitStream {
 private:
     Bits bits;
     void str_to_bitset(std::string& str) {
-        bits.resize(str.size() * byte_size);
-        for(int i = 0; i < str.size(); i++) {
-            for(int k = 0; k < byte_size; k++) {
-                bits[i * byte_size + k] = (str[i] >> k) & 1;
-            }
-        }
+        str_to_bitset(str.begin(), str.end());
     }
     void str_to_bitset(Str_It start, Str_It end) {
         auto size = std::distance(start, end);
@@ -31,10 +26,10 @@ private:
 public:
     BitStream() : BitStream(std::string()) {}
     BitStream(const char *str) : BitStream(std::string(str)) {}
-    BitStream(std::string str) {
-        str_to_bitset(str);
+    BitStream(std::string str) : BitStream(str.begin(), str.end()) {}
+    BitStream(Str_It start, Str_It end) {
+        str_to_bitset(start, end);
     }
-    BitStream(Str_It start, Str_It end) {}
     BitStream& operator=(std::string str) {
         str_to_bitset(str);
         return *this;
@@ -79,36 +74,3 @@ public:
         return str;
     }
 };
-
-/*
-class BitStream {
-public:
-    std::vector<bool> str_to_bitset(std::string str) {
-        std::vector<bool> bitset(str.size() * byte_size);
-        for(int i = 0; i < str.size(); i++) {
-            for(int k = 0; k < byte_size; k++) {
-                bitset[i * byte_size + k] = (str[i] >> k) & 1;
-            }
-        }
-        return bitset;
-    }
-    std::string bitset_to_str(std::vector<bool> bitset) {
-        std::string str(bitset.size() / 8, '\0');
-        for(int i = 0; i < str.size(); i++) {
-            for(int k = 0; k < byte_size; k++) {
-                str[i] = str[i] | (bitset[i * byte_size + k] << k);
-            }
-        }
-        return str;
-    }
-    void print_bitset(std::vector<bool>& bitset) {
-        for(int i = 0; i < bitset.size(); i++) {
-            std::cout << bitset[i];
-            if((i + 1) % 8 == 0) {
-                std::cout << " ";
-            }
-        }
-        std::cout << std::endl;
-    }
-};
-*/

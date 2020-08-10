@@ -3,14 +3,6 @@
 #include "../config.hpp"
 #include "../../lib/winbgim.hpp"
 
-enum RGB {
-    _RED   = 0,
-    _GREEN = 1,
-    _BLUE  = 2,
-};
-
-const RGB rgb[] = {_RED, _GREEN, _BLUE};
-
 struct Point {
     int x, y;
     Point(int x, int y) : x(x), y(y) {}

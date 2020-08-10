@@ -12,6 +12,6 @@ private:
     BitStream stream;
 public:
     Triad(Pixels pixels, BitStream stream);
-    void decrypt();
     std::string encrypt();
+    void decrypt();
 };

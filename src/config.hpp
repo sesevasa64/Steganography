@@ -13,3 +13,11 @@ const int minimum_bits = std::lcm(bits_in_pixel, byte_size);
 
 const int pixel_size = minimum_bits / bits_in_pixel;
 const int chars_in_triad = minimum_bits / byte_size;
+
+enum RGB {
+    _RED   = 0,
+    _GREEN = 1,
+    _BLUE  = 2,
+};
+
+const RGB rgb[] = {_RED, _GREEN, _BLUE};
