@@ -8,7 +8,7 @@ Image::Image(std::string name) {
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
             Point pos(i, j);
-            pixels[i * height + j] = std::make_shared<Pixel>(pos);
+            pixels[i * height + j] = std::make_shared<Pixel>(image, pos);
         }
     }
 }
@@ -17,17 +17,21 @@ Image::~Image() {
 }
 
 SPixel& Image::operator()(int i, int j) {
-    check.push(pixels[i * height + j]);
-    return pixels[i * height + j];
+    return (*this)[i * height + j];
 }
 
-void Image::draw() {
-    while(!check.empty()) {
-        auto& pixel = check.top();
-        int x = pixel->getX(), y = pixel->getY();
-        if(pixel == pixels[y * height + x]) {
-            imageputpixel(image, x, y, pixel->getColorAsInt());
+SPixel& Image::operator[](int index) {
+    return pixels[index];
+}
+
+void Image::update() {
+    for(int i = 0; i < height; i++) {
+        for(int j = 0; j < width; j++) {
+            int old_color = imagegetpixel(image, i, j);
+            int color = pixels[i * height + j]->getColorAsInt();
+            if(old_color != color) {
+                imageputpixel(image, i, j, color);
+            }
         }
-        check.pop();
     }
 }
