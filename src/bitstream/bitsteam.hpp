@@ -16,7 +16,7 @@ private:
     }
     void str_to_bitset(Str_It start, Str_It end) {
         auto size = std::distance(start, end);
-        bits.resize(size * byte_size);
+        bits.resize(size * byte_size, false);
         for(int i = 0; i < size; i++) {
             for(int k = 0; k < byte_size; k++) {
                 bits[i * byte_size + k] = (*start >> k) & 1;

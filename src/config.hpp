@@ -17,6 +17,8 @@ const int chars_in_triad = minimum_bits / byte_size;
 
 const int ratio = ceil(double(byte_size) / minimum_bits);
 
+const int triad_size = width * height / pixel_size;
+
 enum RGB {
     _RED   = 0,
     _GREEN = 1,

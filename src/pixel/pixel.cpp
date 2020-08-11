@@ -6,8 +6,7 @@ Pixel::Pixel(Pixel&& another)
 : pos(another.pos), 
   colors(another.colors) {}
 
-Pixel::Pixel(IMAGE *image, Point pos) : image(image), pos(pos) {
-    auto color = imagegetpixel(image, pos.x, pos.y);
+Pixel::Pixel(Point pos, int color) : pos(pos) {
     for(auto i : rgb) {
         colors[i] = color << (i * byte_size);
     }
@@ -23,11 +22,6 @@ int Pixel::getIntColor() {
         color |= (colors[i] & 0x0ff) << (i * byte_size);
     }
     return color;
-}
-
-void Pixel::draw() {
-    int color = getIntColor();
-    imageputpixel(image, pos.x, pos.y, color);
 }
 
 Pixel& Pixel::operator=(Pixel&& another) {

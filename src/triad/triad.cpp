@@ -13,7 +13,6 @@ void Triad::decrypt(BitStream stream) {
                 colors[j] |= (1u << stream[i + j * used_bits + k]);
             }
         }
-        pixels[i]->draw();
     }
 }
 

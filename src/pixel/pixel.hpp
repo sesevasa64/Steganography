@@ -11,15 +11,13 @@ class Pixel {
 private:
     Point pos;
     Colors colors;
-    IMAGE *image;
 public:
     Pixel();
-    Pixel(IMAGE *image, Point pos);
+    Pixel(Point pos, int color);
     Pixel(Pixel&& another);
     Pixel& operator=(Pixel&& another);
     Colors& getColor();
     int getIntColor();
     int getX() { return pos.x; }
     int getY() { return pos.y; }
-    void draw();
 };

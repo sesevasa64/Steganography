@@ -12,6 +12,7 @@ Image::Image(std::string name) {
         }
     }
 }
+
 Image::~Image() {
     freeimage(image);
 }
@@ -28,9 +29,9 @@ void Image::update() {
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
             int old_color = imagegetpixel(image, i, j);
-            int color = pixels[i * height + j]->getColorAsInt();
-            if(old_color != color) {
-                imageputpixel(image, i, j, color);
+            int cur_color = pixels[i * height + j]->getIntColor();
+            if(old_color != cur_color) {
+                imageputpixel(image, i, j, cur_color);
             }
         }
     }
