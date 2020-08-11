@@ -3,25 +3,24 @@
 
 Triad::Triad() : pixels() {}
 
-Triad::Triad(Pixels& pixels) 
-: pixels(pixels) {}
+Triad::Triad(Pixels& pixels) : pixels(pixels) {}
 
 void Triad::decrypt(BitStream stream) {
     for(int i = 0; i < minimum_bits; i += bits_in_pixel) {
-        auto colors = pixels[i].getColor();
+        auto colors = pixels[i]->getColor();
         for(int j = 0; j < components; j++) {
             for(int k = 0; k < used_bits; k++) {
                 colors[j] |= (1u << stream[i + j * used_bits + k]);
             }
         }
-        pixels[i].draw();
+        pixels[i]->draw();
     }
 }
 
 std::string Triad::encrypt() {
     Bits bits(minimum_bits);
     for(int i = 0; i < minimum_bits; i += bits_in_pixel) {
-        auto colors = pixels[i].getColor();
+        auto colors = pixels[i]->getColor();
         for(int j = 0; j < components; j++) {
             for(int k = 0; k < used_bits; k++) {
                 bits[i + j * used_bits + k] = (colors[j] >> k) && 1;

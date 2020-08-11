@@ -17,11 +17,16 @@ Colors& Pixel::getColor() {
     return colors;
 }
 
-void Pixel::draw() {
+int Pixel::getColorAsInt() {
     int color = 0;
     for(auto i : rgb) {
         color |= (colors[i] & 0x0ff) << (i * byte_size);
     }
+    return color;
+}
+
+void Pixel::draw() {
+    int color = getColorAsInt();
     putpixel(pos.x, pos.y, color);
 }
 

@@ -1,10 +1,12 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <memory>
 #include "../pixel/pixel.hpp"
 #include "../bitstream/bitsteam.hpp"
 
-typedef std::vector<Pixel> Pixels;
+typedef std::shared_ptr<Pixel> SPixel;
+typedef std::vector<SPixel> Pixels;
 
 class Triad {
 private:

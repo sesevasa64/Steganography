@@ -17,4 +17,7 @@ public:
     Pixel& operator=(Pixel&& another);
     Colors& getColor();
     void draw();
+    int getX() { return pos.x; }
+    int getY() { return pos.y; }
+    int getColorAsInt();
 };
