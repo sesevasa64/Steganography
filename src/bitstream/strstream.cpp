@@ -1,4 +1,4 @@
-#include "bitsteam.hpp"
+#include "bitstream.hpp"
 
 void StrStream::bitset_to_str(Bits& bits) {
     str.resize(bits.size() / 8);

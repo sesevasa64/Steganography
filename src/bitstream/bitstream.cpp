@@ -35,7 +35,7 @@ BitStream& BitStream::operator=(const char* str) {
     return *this;
 }
 
-BitStream& BitStream::operator=(const BitStream& another) {
+BitStream& BitStream::operator=(BitStream&& another) {
     bits = another.bits;
     return *this;
 }

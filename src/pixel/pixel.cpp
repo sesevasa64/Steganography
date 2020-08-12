@@ -27,4 +27,5 @@ int Pixel::getIntColor() {
 Pixel& Pixel::operator=(Pixel&& another) {
     std::swap(pos, another.pos);
     std::swap(colors, another.colors);
+    return *this;
 }

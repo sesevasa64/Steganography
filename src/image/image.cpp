@@ -8,7 +8,8 @@ Image::Image(std::string name) {
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
             Point pos(i, j);
-            pixels[i * height + j] = std::make_shared<Pixel>(image, pos);
+            int color = imagegetpixel(image, i, j);
+            pixels[i * height + j] = std::make_shared<Pixel>(pos, color);
         }
     }
 }

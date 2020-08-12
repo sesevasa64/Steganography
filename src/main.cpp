@@ -5,6 +5,8 @@
 #include "bitstream/bitstream.hpp"
 #include "triad/triad.hpp"
 #include "converter/decrypter.hpp"
+#include "image/image.hpp"
+#include "point/point.hpp"
 #include "../lib/winbgim.hpp"
 
 using namespace std;
@@ -19,7 +21,7 @@ int main() {
     //getch();
     string str = "what";
     cout << str << endl;
-    BitStream bs(str);
+    BitStream bs = str;
     auto bits = bs.getBits();
     StrStream ss = bits;
     cout << ss.getStr() << endl;
@@ -28,6 +30,6 @@ int main() {
     cout << ceil(double(byte_size) / min_bits) << endl;
     //cout << ceil(7. * byte_size / minimum_bits) * minimum_bits << endl;
     string mes(5u, '0');
-    mes += "sfagagasgasgsa";
+    mes += "sfagasfasvgdg";
     return 0;
 }

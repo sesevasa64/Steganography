@@ -24,7 +24,7 @@ public:
     BitStream& operator=(std::string& str);
     BitStream& operator=(std::string&& str);
     BitStream& operator=(const char* str);
-    BitStream& operator=(const BitStream& another);
+    BitStream& operator=(BitStream&& another);
     bool operator[](int index);
     Bits getBits();
 };

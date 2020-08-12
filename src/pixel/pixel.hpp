@@ -4,7 +4,6 @@
 #include "../config.hpp"
 #include "../../lib/winbgim.hpp"
 
-class Image;
 typedef std::array<int, components> Colors;
 
 class Pixel {

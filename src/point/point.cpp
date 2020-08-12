@@ -1,3 +1,4 @@
+#include <iostream>
 #include "point.hpp"
 
 Point::Point() : Point(-1, -1) {}

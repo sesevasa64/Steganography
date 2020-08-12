@@ -15,7 +15,7 @@ void Decrypter::decrypt(std::string str) {
         }
         BitStream stream(cur_str, cur_str + chars_in_triad);
         *cur_triad = std::make_shared<Triad>(pixels);
-        (*cur_triad)->decrypt(stream);
+        (*cur_triad)->decrypt(std::move(stream));
         cur_str += chars_in_triad;
     }
 }
@@ -26,6 +26,7 @@ std::string Decrypter::encrypt() {
     for(auto& triad : triads) {
         res += triad->encrypt();
     }
+    return res;
 }
 
 int Decrypter::calc_size(int str_size) {
