@@ -15,7 +15,9 @@ const int min_bits = std::lcm(bits_in_pixel, byte_size);
 const int pixel_size = min_bits / bits_in_pixel;
 const int chars_in_triad = min_bits / byte_size;
 
-const int ratio = ceil(double(byte_size) / min_bits);
+//const int ratio = ceil(double(byte_size) / min_bits);
+
+const std::string end(chars_in_triad, '\0');
 
 const int triad_size = width * height / pixel_size;
 

@@ -28,10 +28,10 @@ class Decrypter {
 private:
     Image *image;
     Triads triads;
-    int index;
     int calc_size(int str_size);
 public:
     Decrypter(Image *image);
+    ~Decrypter();
     void decrypt(std::string str);
 };
 

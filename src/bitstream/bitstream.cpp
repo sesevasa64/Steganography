@@ -4,7 +4,7 @@ int BitStream::calc_size(int str_size) {
     return ceil(double(str_size * byte_size) / min_bits) * min_bits; 
 }
 
-void BitStream::str_to_bitset(std::string& str) {
+void BitStream::str_to_bitset(const std::string& str) {
     str_to_bitset(str.begin(), str.end());
 }
 
@@ -19,12 +19,12 @@ void BitStream::str_to_bitset(Str_It start, Str_It end) {
     }
 }
 
-BitStream& BitStream::operator=(std::string& str) {
+BitStream& BitStream::operator=(const std::string& str) {
     str_to_bitset(str);
     return *this;
 }
 
-BitStream& BitStream::operator=(std::string&& str) {
+BitStream& BitStream::operator=(const std::string&& str) {
     str_to_bitset(str);
     return *this;
 }
@@ -56,9 +56,9 @@ BitStream::BitStream(BitStream&& another) {
 
 BitStream::BitStream(const char *str) : BitStream(std::string(str)) {}
 
-BitStream::BitStream(std::string& str) : BitStream(str.begin(), str.end()) {}
+BitStream::BitStream(const std::string& str) : BitStream(str.begin(), str.end()) {}
 
-BitStream::BitStream(std::string&& str) : BitStream(str.begin(), str.end()) {}
+BitStream::BitStream(const std::string&& str) : BitStream(str.begin(), str.end()) {}
 
 BitStream::BitStream(Str_It start, Str_It end) {
     str_to_bitset(start, end);
