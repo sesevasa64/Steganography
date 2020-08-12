@@ -4,7 +4,7 @@
 #include "config.hpp"
 #include "bitstream/bitstream.hpp"
 #include "triad/triad.hpp"
-#include "converter/decrypter.hpp"
+#include "crypters/crypters.hpp"
 #include "image/image.hpp"
 #include "point/point.hpp"
 #include "../lib/winbgim.hpp"
@@ -29,7 +29,9 @@ int main() {
     //swap(p1, p2);
     cout << ceil(double(byte_size) / min_bits) << endl;
     //cout << ceil(7. * byte_size / minimum_bits) * minimum_bits << endl;
-    string mes(5u, '0');
-    mes += "sfagasfasvgdg";
+    string mes = "hello";
+    mes.reserve(25);
+    mes += "what";
+    cout << mes << endl;
     return 0;
 }

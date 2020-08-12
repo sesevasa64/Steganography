@@ -1,6 +1,9 @@
-#include "decrypter.hpp"
+#include "crypters.hpp"
 
-Decrypter::Decrypter(Image *image) : image(image), triads(0), index(0) {}
+Decrypter::Decrypter(Image *image) 
+: image(image), 
+  triads(0), 
+  index(0) {}
 
 void Decrypter::decrypt(std::string str) {
     Str_It cur_str(str.begin());
@@ -20,15 +23,19 @@ void Decrypter::decrypt(std::string str) {
     }
 }
 
-std::string Decrypter::encrypt() {
-    auto size = std::distance(triads.begin(), triads.end());
-    std::string res(size * chars_in_triad, '\0');
+int Decrypter::calc_size(int str_size) {
+    return ceil(double(str_size) / pixel_size);
+}
+
+Encrypter::Encrypter(Image *image) 
+: image(image), 
+  triads(image->Height() * image->Width()) {}
+
+std::string Encrypter::encrypt() {
+    std::string res;
+    res.reserve(triads.size() * chars_in_triad);
     for(auto& triad : triads) {
         res += triad->encrypt();
     }
     return res;
-}
-
-int Decrypter::calc_size(int str_size) {
-    return ceil(double(str_size) / pixel_size);
 }
