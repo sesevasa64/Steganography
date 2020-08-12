@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "config.hpp"
-#include "bitstream/bitsteam.hpp"
+#include "bitstream/bitstream.hpp"
 #include "triad/triad.hpp"
 #include "converter/decrypter.hpp"
 #include "../lib/winbgim.hpp"
@@ -19,12 +19,15 @@ int main() {
     //getch();
     string str = "what";
     cout << str << endl;
-    BitStream bs = str;
+    BitStream bs(str);
     auto bits = bs.getBits();
     StrStream ss = bits;
     cout << ss.getStr() << endl;
     //Point p1(1, 2), p2(3, 4);
     //swap(p1, p2);
-    cout << ceil(double(byte_size) / minimum_bits) << endl;
+    cout << ceil(double(byte_size) / min_bits) << endl;
+    //cout << ceil(7. * byte_size / minimum_bits) * minimum_bits << endl;
+    string mes(5u, '0');
+    mes += "sfagagasgasgsa";
     return 0;
 }

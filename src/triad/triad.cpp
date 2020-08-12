@@ -6,7 +6,7 @@ Triad::Triad() : pixels() {}
 Triad::Triad(Pixels& pixels) : pixels(pixels) {}
 
 void Triad::decrypt(BitStream stream) {
-    for(int i = 0; i < minimum_bits; i += bits_in_pixel) {
+    for(int i = 0; i < min_bits; i += bits_in_pixel) {
         auto colors = pixels[i]->getColor();
         for(int j = 0; j < components; j++) {
             for(int k = 0; k < used_bits; k++) {
@@ -17,8 +17,8 @@ void Triad::decrypt(BitStream stream) {
 }
 
 std::string Triad::encrypt() {
-    Bits bits(minimum_bits);
-    for(int i = 0; i < minimum_bits; i += bits_in_pixel) {
+    Bits bits(min_bits);
+    for(int i = 0; i < min_bits; i += bits_in_pixel) {
         auto colors = pixels[i]->getColor();
         for(int j = 0; j < components; j++) {
             for(int k = 0; k < used_bits; k++) {

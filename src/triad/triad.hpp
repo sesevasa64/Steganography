@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include "../pixel/pixel.hpp"
-#include "../bitstream/bitsteam.hpp"
+#include "../bitstream/bitstream.hpp"
 
 typedef std::shared_ptr<Pixel> SPixel;
 typedef std::vector<SPixel> Pixels;
