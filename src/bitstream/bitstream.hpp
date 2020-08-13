@@ -27,6 +27,7 @@ public:
     BitStream& operator=(BitStream&& another);
     bool operator[](int index);
     Bits getBits();
+    int size() { return bits.size(); }
 };
 
 class StrStream {

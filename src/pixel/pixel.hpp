@@ -4,19 +4,16 @@
 #include "../config.hpp"
 #include "../../lib/winbgim.hpp"
 
-typedef std::array<int, components> Colors;
-
 class Pixel {
 private:
     Point pos;
-    Colors colors;
+    int color;
 public:
     Pixel();
     Pixel(Point pos, int color);
     Pixel(Pixel&& another);
     Pixel& operator=(Pixel&& another);
-    Colors& getColor();
-    int getIntColor();
+    int& getColor();
     int getX() { return pos.x; }
     int getY() { return pos.y; }
 };
