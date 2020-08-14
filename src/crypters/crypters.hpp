@@ -1,27 +1,9 @@
 #pragma once
-#include <cmath>
 #include <string>
-#include <vector>
 #include "../image/image.hpp"
 #include "../triad/triad.hpp"
-#include "../config.hpp"
 
 typedef std::vector<std::shared_ptr<Triad>> Triads;
-
-/*
-Image image("image.bmp");
-
-Decrypter dc;
-string message("hello world");
-dc.decrypt(image, message)
-
-или
-
-Decrypter dc(image);
-string m1, m2;
-dc.decrypt(m1);
-dc.dectypt(m2);
-*/
 
 class Loader {
 private:
@@ -53,3 +35,18 @@ public:
     Encrypter(Image *image);
     std::string encrypt();
 };
+
+/*
+Image image("image.bmp");
+
+Decrypter dc;
+string message("hello world");
+dc.decrypt(image, message)
+
+или
+
+Decrypter dc(image);
+string m1, m2;
+dc.decrypt(m1);
+dc.dectypt(m2);
+*/

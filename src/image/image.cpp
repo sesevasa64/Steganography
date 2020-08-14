@@ -9,8 +9,10 @@ Image::Image(std::string name) : name(name) {
     }
     height = imageheight(image);
     width  = imagewidth(image);
-    std::cout << "Height: " << height << std::endl;
-    std::cout << "Width: " << width << std::endl;
+    int capacity = height * width * char_per_pixel - chars_in_triad;
+    std::cout << "Image Height: " << height << std::endl;
+    std::cout << "Image Width: "  << width  << std::endl;
+    std::cout << "Image Capacity: " << capacity << std::endl;
     pixels = Pixels(height * width);
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
@@ -19,7 +21,7 @@ Image::Image(std::string name) : name(name) {
             pixels[j * height + i] = std::make_shared<Pixel>(pos, color);
         }
     }
-    std::cout << "Image created succesfully" << std::endl;
+    std::cout << "Image loaded succesfully" << std::endl;
 }
 
 Image::~Image() {
@@ -42,10 +44,6 @@ void Image::update() {
             int cur_color = pixels[j * height + i]->getColor();
             if(old_color != cur_color) {
                 imageputpixel(image, j, i, cur_color);
-                std::cout << "Change color at: " << j << ", " << i << std::endl;
-                std::cout << "Old color: " << old_color << std::endl;
-                std::cout << "New color: " << cur_color << std::endl;
-                getch();
             }
         }
     }

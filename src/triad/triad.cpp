@@ -1,4 +1,3 @@
-#include <bitset>
 #include "triad.hpp"
 #include "../config.hpp"
 
@@ -7,7 +6,6 @@ Triad::Triad() : pixels() {}
 Triad::Triad(Pixels& pixels) : pixels(pixels) {}
 
 void Triad::decrypt(BitStream stream) { 
-    std::cout << "Stream size: " << stream.size() << std::endl;
     int idx = 0;
     for(int i = 0; i < pixel_size; i++) {
         int& color = pixels[i]->getColor();
@@ -33,24 +31,3 @@ std::string Triad::encrypt() {
     }   
     return StrStream(bits).getStr();
 }
-/*
-    std::cout << "Bits: ";
-    for(int i = 0; i < stream.size(); i++) {
-        std::cout << stream[i];
-        if((i + 1) % byte_size == 0) {
-            //std::cout << " ";
-        }
-    }
-    std::cout << std::endl;
-*/
-/*
-    std::cout << "Bits: ";
-    for(int i = 0; i < bits.size(); i++) {
-        std::cout << bits[i];
-        if((i + 1) % byte_size == 0) {
-            //std::cout << " ";
-        }
-    }
-    std::cout << std::endl;
-    std::cout << "Pizdec" << std::endl;
-*/

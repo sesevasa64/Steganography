@@ -1,3 +1,4 @@
+#include <cmath>
 #include "bitstream.hpp"
 
 int BitStream::calc_size(int str_size) {

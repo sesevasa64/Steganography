@@ -1,7 +1,5 @@
 #pragma once
-#include <array>
 #include "../point/point.hpp"
-#include "../config.hpp"
 #include "../../lib/winbgim.hpp"
 
 class Pixel {

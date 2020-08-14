@@ -1,7 +1,5 @@
 #pragma once
 #include <string>
-#include "../point/point.hpp"
-#include "../pixel/pixel.hpp"
 #include "../triad/triad.hpp"
 #include "../../lib/winbgim.hpp"
 

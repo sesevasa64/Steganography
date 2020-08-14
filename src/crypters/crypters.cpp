@@ -1,3 +1,4 @@
+#include <cmath>
 #include "crypters.hpp"
 
 Pixels Loader::load_pixels(Image *image) {
@@ -11,24 +12,19 @@ Pixels Loader::load_pixels(Image *image) {
 Decrypter::Decrypter(Image *image) : image(image), loader(image) {}
 
 void Decrypter::decrypt(std::string str) {
-    Str_It cur_str(str.begin());
+    str += std::string(str.size() / chars_in_triad, '\0');
     int start = triads.size();
     int nsize = calc_size(str.size());
-    std::cout << "Old triad size: " << triads.size() << std::endl;
-    triads.resize(triads.size() + nsize);
-    std::cout << "New triad size: " << triads.size() << std::endl;
+    triads.resize(start + nsize);
     int end = triads.size();
-    std::cout << "Before decrypt cycle" << std::endl;
+    Str_It cur_str(str.begin());
     for(int i = start; i < end; i++) {
-        auto pixels = loader.load_pixels(image);
+        auto&& pixels = loader.load_pixels(image);
         BitStream stream(cur_str, cur_str + chars_in_triad);
-        std::cout << "Before new triad allocation" << std::endl;
         triads[i] = std::make_shared<Triad>(pixels);
-        std::cout << "After new triad allocation" << std::endl;
         triads[i]->decrypt(std::move(stream));
         cur_str += chars_in_triad;
     }
-    std::cout << "After decrypt cycle" << std::endl;
 }
 
 Decrypter::~Decrypter() {
@@ -47,12 +43,10 @@ Encrypter::Encrypter(Image *image) : image(image), loader(image) {}
 std::string Encrypter::encrypt() {
     std::string res, temp;
     while(temp != end) {
-        auto pixels = loader.load_pixels(image);
+        auto&& pixels = loader.load_pixels(image);
         triads.push_back(std::make_shared<Triad>(pixels));
         temp = triads.back()->encrypt();
         res += temp;
-        std::cout << temp << std::endl;
-        getch();
     }
     return res;
 }

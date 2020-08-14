@@ -86,9 +86,7 @@ int main() {
 
     }
     */
-    
     cout << endl;
-    //Image image("tiger.bmp");
     {
         Image image("tiger.bmp");
         Decrypter dc(&image);
