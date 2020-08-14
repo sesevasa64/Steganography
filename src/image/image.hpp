@@ -7,6 +7,7 @@
 
 class Image {
 private:
+    std::string name;
     IMAGE *image;
     int height;
     int width;

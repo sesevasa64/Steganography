@@ -1,7 +1,6 @@
 #include "crypters.hpp"
 
-Pixels load_pixels(Image *image) {
-    static int index = 0;
+Pixels Loader::load_pixels(Image *image) {
     Pixels pixels(pixel_size);
     for(auto& pixel : pixels) {
         pixel = (*image)[index++];
@@ -9,62 +8,51 @@ Pixels load_pixels(Image *image) {
     return pixels;
 }
 
-Decrypter::Decrypter(Image *image) : image(image) {}
+Decrypter::Decrypter(Image *image) : image(image), loader(image) {}
 
 void Decrypter::decrypt(std::string str) {
     Str_It cur_str(str.begin());
-    Triads_It start(triads.end());
+    int start = triads.size();
     int nsize = calc_size(str.size());
+    std::cout << "Old triad size: " << triads.size() << std::endl;
     triads.resize(triads.size() + nsize);
-    Triads_It end(triads.end());
-    for(auto cur_triad = start; cur_triad != end; cur_triad++) {
-        auto pixels = load_pixels(image);
+    std::cout << "New triad size: " << triads.size() << std::endl;
+    int end = triads.size();
+    std::cout << "Before decrypt cycle" << std::endl;
+    for(int i = start; i < end; i++) {
+        auto pixels = loader.load_pixels(image);
         BitStream stream(cur_str, cur_str + chars_in_triad);
-        *cur_triad = std::make_shared<Triad>(pixels);
-        (*cur_triad)->decrypt(std::move(stream));
+        std::cout << "Before new triad allocation" << std::endl;
+        triads[i] = std::make_shared<Triad>(pixels);
+        std::cout << "After new triad allocation" << std::endl;
+        triads[i]->decrypt(std::move(stream));
         cur_str += chars_in_triad;
     }
+    std::cout << "After decrypt cycle" << std::endl;
 }
 
 Decrypter::~Decrypter() {
-    auto pixels = load_pixels(image);
+    auto pixels = loader.load_pixels(image);
     Triad triad(pixels);
     triad.decrypt(BitStream(end));
+    image->update();
 }
 
 int Decrypter::calc_size(int str_size) {
     return ceil(double(str_size) / pixel_size);
 }
 
-Encrypter::Encrypter(Image *image) : image(image) {}
+Encrypter::Encrypter(Image *image) : image(image), loader(image) {}
 
 std::string Encrypter::encrypt() {
     std::string res, temp;
     while(temp != end) {
-        auto pixels = load_pixels(image);
+        auto pixels = loader.load_pixels(image);
         triads.push_back(std::make_shared<Triad>(pixels));
         temp = triads.back()->encrypt();
         res += temp;
+        std::cout << temp << std::endl;
+        getch();
     }
     return res;
 }
-/*
-std::string Encrypter::encrypt() {
-    std::string res, temp;
-    std::shared_ptr<Triad> triad;
-    while(temp != end) {
-        auto pixels = load_pixels(image);
-        triad = std::make_shared<Triad>(pixels);
-        temp = triad->encrypt();
-        res += temp;
-    }
-    return res;
-}
-*/
-/*
-std::string res;
-for(auto& triad : triads) {
-    res += triad->encrypt();
-}
-return res;
-*/

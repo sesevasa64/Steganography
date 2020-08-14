@@ -7,7 +7,6 @@
 #include "../config.hpp"
 
 typedef std::vector<std::shared_ptr<Triad>> Triads;
-typedef Triads::iterator Triads_It;
 
 /*
 Image image("image.bmp");
@@ -24,10 +23,20 @@ dc.decrypt(m1);
 dc.dectypt(m2);
 */
 
+class Loader {
+private:
+    Image *image;
+    int index;
+public:
+    Pixels load_pixels(Image *image);
+    Loader(Image *image) : image(image), index(0) {}
+};
+
 class Decrypter {
 private:
     Image *image;
     Triads triads;
+    Loader loader;
     int calc_size(int str_size);
 public:
     Decrypter(Image *image);
@@ -39,6 +48,7 @@ class Encrypter {
 private:
     Image *image;
     Triads triads;
+    Loader loader;
 public:
     Encrypter(Image *image);
     std::string encrypt();

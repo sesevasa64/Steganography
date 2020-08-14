@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <bitset>
+#include <ctime>
 #include "config.hpp"
 #include "bitstream/bitstream.hpp"
 #include "triad/triad.hpp"
@@ -13,6 +14,8 @@
 using namespace std;
 
 int main() {
+    initwindow(800, 600);
+    /*
     {
         int r = 255, b = 0, g = 0;
         int rgb = ((b & 0x0ff) << 16) | ((g & 0x0ff) << 8) | (r & 0x0ff);
@@ -53,8 +56,9 @@ int main() {
         string mes = "hello";
     }
     cout << endl;
+    */
+    /*
     {
-        initwindow(800, 600);
         Image image("tiger.bmp");
         putimage(0, 0, image.get(), 0);
         Pixels pixels(pixel_size);
@@ -65,10 +69,41 @@ int main() {
         BitStream bs = mes;
         Triad triad(pixels);
         triad.decrypt(std::move(bs));
-        string res = triad.encrypt();
         cout << "Decoding: " << mes << endl;
-        cout << "Encoding: " << res << endl;
-        getch();
+        image.update();
     }
+    cout << endl;
+    {
+        Image image("tiger.bmp");
+        putimage(0, 0, image.get(), 0);
+        Pixels pixels(pixel_size);
+        for(int i = 0; i < pixel_size; i++) {
+            pixels[i] = image[i];
+        }
+        Triad triad(pixels);
+        string res = triad.encrypt();
+        cout << "Encoding: " << res << endl;
+
+    }
+    */
+    
+    cout << endl;
+    //Image image("tiger.bmp");
+    {
+        Image image("tiger.bmp");
+        Decrypter dc(&image);
+        string message = "Hello, World!";
+        dc.decrypt(message);
+        cout << "Decrypted: " << message << endl;
+    }
+    cout << endl;
+    {
+        Image image("tiger.bmp");
+        Encrypter ec(&image);
+        string message = ec.encrypt();
+        cout << "Eecrypted: " << message << endl;
+    }
+    getch();
+    closegraph();
     return 0;
 }
