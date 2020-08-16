@@ -1,49 +1,68 @@
+#include <iostream>
 #include <cmath>
 #include "crypters.hpp"
 
-Pixels Loader::load_pixels(Image *image) {
-    Pixels pixels(pixel_size);
+Loader::Loader(Image *image, std::string password) 
+: image(image),
+  pixels(pixel_size) {
+    std::hash<std::string> hash;
+    srand(hash(password));
+}
+
+Pixels& Loader::load_pixels() {
     for(auto& pixel : pixels) {
-        pixel = (*image)[index++];
+        int i = rand() % image->Width();
+        int j = rand() % image->Height();
+        //std::cout << "At: " << i << ", " << j << std::endl;
+        pixel = (*image)(i, j);
     }
     return pixels;
 }
 
-Decrypter::Decrypter(Image *image) : image(image), loader(image) {}
+Crypter::Crypter(Image *image, std::string password)
+: image(image),
+  capacity(image->Height() * image->Width() * char_per_pixel - chars_in_triad), 
+  loader(image, std::move(password)) {
+      std::cout << "Image capacity: " << capacity << std::endl;
+  }
+
+Decrypter::Decrypter(Image *image, std::string password) 
+: used(0u),
+  image(image),
+  capacity(image->Height() * image->Width() * char_per_pixel - chars_in_triad),
+  loader(image, std::move(password)) {}
 
 void Decrypter::decrypt(std::string str) {
-    str += std::string(str.size() / chars_in_triad, '\0');
-    int start = triads.size();
-    int nsize = calc_size(str.size());
-    triads.resize(start + nsize);
-    int end = triads.size();
-    Str_It cur_str(str.begin());
-    for(int i = start; i < end; i++) {
-        auto&& pixels = loader.load_pixels(image);
-        BitStream stream(cur_str, cur_str + chars_in_triad);
-        triads[i] = std::make_shared<Triad>(pixels);
-        triads[i]->decrypt(std::move(stream));
-        cur_str += chars_in_triad;
+    // Работает и без этого..., видимо после str.end() идут нулевые байты?
+    str += std::string(chars_in_triad - str.size() % chars_in_triad, '\0');
+    if(used + str.size() >= capacity) {
+        std::cout << "Image capacity overflow!";
+        throw std::bad_exception();
+    }
+    used += str.size();
+    for(auto it = str.begin(); it != str.end(); it += chars_in_triad) {
+        auto& pixels = loader.load_pixels();
+        BitStream stream(it, it + chars_in_triad);
+        triads.push_back(std::make_shared<Triad>(pixels));
+        triads.back()->decrypt(std::move(stream));
     }
 }
 
 Decrypter::~Decrypter() {
-    auto pixels = loader.load_pixels(image);
+    auto& pixels = loader.load_pixels();
     Triad triad(pixels);
     triad.decrypt(BitStream(end));
     image->update();
 }
 
-int Decrypter::calc_size(int str_size) {
-    return ceil(double(str_size) / pixel_size);
-}
-
-Encrypter::Encrypter(Image *image) : image(image), loader(image) {}
+Encrypter::Encrypter(Image *image, std::string password) 
+: image(image), 
+  loader(image, std::move(password)) {}
 
 std::string Encrypter::encrypt() {
     std::string res, temp;
     while(temp != end) {
-        auto&& pixels = loader.load_pixels(image);
+        auto& pixels = loader.load_pixels();
         triads.push_back(std::make_shared<Triad>(pixels));
         temp = triads.back()->encrypt();
         res += temp;

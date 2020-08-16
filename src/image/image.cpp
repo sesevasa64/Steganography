@@ -9,10 +9,8 @@ Image::Image(std::string name) : name(name) {
     }
     height = imageheight(image);
     width  = imagewidth(image);
-    int capacity = height * width * char_per_pixel - chars_in_triad;
     std::cout << "Image Height: " << height << std::endl;
     std::cout << "Image Width: "  << width  << std::endl;
-    std::cout << "Image Capacity: " << capacity << std::endl;
     pixels = Pixels(height * width);
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
@@ -37,6 +35,10 @@ SPixel& Image::operator[](int index) {
     return pixels[index];
 }
 
+SPixel& Image::operator[](Point pos) {
+    return this->operator()(pos.x, pos.y);
+}
+
 void Image::update() {
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
@@ -44,6 +46,7 @@ void Image::update() {
             int cur_color = pixels[j * height + i]->getColor();
             if(old_color != cur_color) {
                 imageputpixel(image, j, i, cur_color);
+                std::cout << "Position: " << j << ", " << i << std::endl;
             }
         }
     }

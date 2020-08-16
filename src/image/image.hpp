@@ -19,5 +19,6 @@ public:
     int Size()   { return height * width; }
     SPixel& operator()(int i, int j);
     SPixel& operator[](int index);
+    SPixel& operator[](Point point);
     IMAGE *get() { return image; }
 };

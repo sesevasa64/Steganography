@@ -1,11 +1,10 @@
 #pragma once
 #include <numeric>
 
-const int width  = 800;
-const int height = 600;
+// user setting
+const int used_bits  = 2;
 
-const int byte_size = 8;
-const int used_bits = 2;
+const int byte_size  = 8;
 const int components = 3;
 
 const int bits_in_pixel = used_bits * components;
