@@ -9,17 +9,17 @@ Image::Image(std::string name) : name(name) {
     }
     height = imageheight(image);
     width  = imagewidth(image);
-    std::cout << "Image Height: " << height << std::endl;
-    std::cout << "Image Width: "  << width  << std::endl;
+    //std::cout << "Image Height: " << height << std::endl;
+    //std::cout << "Image Width: "  << width  << std::endl;
     pixels = Pixels(height * width);
-    for(int i = 0; i < height; i++) {
-        for(int j = 0; j < width; j++) {
-            Point pos(j, i);
-            int color = imagegetpixel(image, j, i);
-            pixels[j * height + i] = std::make_shared<Pixel>(pos, color);
+    for(int y = 0; y < height; y++) {
+        for(int x = 0; x < width; x++) {
+            Point pos(x, y);
+            int color = imagegetpixel(image, x, y);
+            pixels[y * width + x] = std::make_shared<Pixel>(pos, color);
         }
     }
-    std::cout << "Image loaded succesfully" << std::endl;
+    //std::cout << "Image loaded succesfully" << std::endl;
 }
 
 Image::~Image() {
@@ -27,8 +27,8 @@ Image::~Image() {
     freeimage(image);
 }
 
-SPixel& Image::operator()(int i, int j) {
-    return (*this)[i * height + j];
+SPixel& Image::operator()(int x, int y) {
+    return (*this)[y * width + x];
 }
 
 SPixel& Image::operator[](int index) {
@@ -40,13 +40,13 @@ SPixel& Image::operator[](Point pos) {
 }
 
 void Image::update() {
-    for(int i = 0; i < height; i++) {
-        for(int j = 0; j < width; j++) {
-            int old_color = imagegetpixel(image, j, i);
-            int cur_color = pixels[j * height + i]->getColor();
+    for(int y = 0; y < height; y++) {
+        for(int x = 0; x < width; x++) {
+            int old_color = imagegetpixel(image, x, y);
+            int cur_color = pixels[y * width + x]->getColor();
             if(old_color != cur_color) {
-                imageputpixel(image, j, i, cur_color);
-                std::cout << "Position: " << j << ", " << i << std::endl;
+                imageputpixel(image, x, y, cur_color);
+                //std::cout << "Position: " << j << ", " << i << std::endl;
             }
         }
     }

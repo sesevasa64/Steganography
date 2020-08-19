@@ -4,40 +4,50 @@
 
 Loader::Loader(Image *image, std::string password) 
 : image(image),
-  pixels(pixel_size) {
+  pixels(pixel_size),
+  indexes(image->Size()) {
     std::hash<std::string> hash;
     srand(hash(password));
+    int height = image->Height(), width = image->Width();
+    auto it = indexes.begin();
+    for(int y = 0; y < height; y++) {
+        for(int x = 0; x < width; x++) {
+            (*it++) = y * width + x;
+        }
+    }
+}
+
+SPixel& Loader::getPixel() {
+    auto it = indexes.begin();
+    std::advance(it, rand() % indexes.size());
+    auto& result = (*image)[*it];
+    indexes.erase(it);
+    return result;
 }
 
 Pixels& Loader::load_pixels() {
     for(auto& pixel : pixels) {
-        int i = rand() % image->Width();
-        int j = rand() % image->Height();
-        //std::cout << "At: " << i << ", " << j << std::endl;
-        pixel = (*image)(i, j);
+        pixel = getPixel();
     }
     return pixels;
 }
 
 Crypter::Crypter(Image *image, std::string password)
 : image(image),
-  capacity(image->Height() * image->Width() * char_per_pixel - chars_in_triad), 
+  capacity(image->Size() * char_per_pixel - chars_in_triad), 
   loader(image, std::move(password)) {
       std::cout << "Image capacity: " << capacity << std::endl;
   }
 
-Decrypter::Decrypter(Image *image, std::string password) 
-: used(0u),
-  image(image),
-  capacity(image->Height() * image->Width() * char_per_pixel - chars_in_triad),
-  loader(image, std::move(password)) {}
+Decrypter::Decrypter(Image *image, std::string password)
+: Crypter(image, std::move(password)),
+  used(0u) {}
 
 void Decrypter::decrypt(std::string str) {
     // Работает и без этого..., видимо после str.end() идут нулевые байты?
     str += std::string(chars_in_triad - str.size() % chars_in_triad, '\0');
     if(used + str.size() >= capacity) {
-        std::cout << "Image capacity overflow!";
-        throw std::bad_exception();
+        throw std::length_error("Image capacity overflow!");
     }
     used += str.size();
     for(auto it = str.begin(); it != str.end(); it += chars_in_triad) {
@@ -56,8 +66,7 @@ Decrypter::~Decrypter() {
 }
 
 Encrypter::Encrypter(Image *image, std::string password) 
-: image(image), 
-  loader(image, std::move(password)) {}
+: Crypter(image, std::move(password)) {}
 
 std::string Encrypter::encrypt() {
     std::string res, temp;
@@ -66,6 +75,9 @@ std::string Encrypter::encrypt() {
         triads.push_back(std::make_shared<Triad>(pixels));
         temp = triads.back()->encrypt();
         res += temp;
+        if(res.size() > capacity) { // Костыль.... или нет?
+            throw std::invalid_argument("Password is incorrect!");
+        }
     }
     return res;
 }
