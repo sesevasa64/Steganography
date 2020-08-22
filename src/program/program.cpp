@@ -24,16 +24,7 @@ bool InputParser::cmdOptionExists(const std::string &option) const {
     return std::find(tokens.begin(), tokens.end(), option) != tokens.end();
 }
 
-Program::Program(InputParser& parser) : parser(parser) {
-    initwindow(800, 600, "Testing");
-    crypter_mode = setCrypterMode();
-    input_mode   = setInputMode();
-    image        = new Image(loadOption("Image", "-i"));
-    password     = loadOption("Password", "-p");
-    if(crypter_mode == DECRYPT && input_mode == CMD) {
-        message  = loadOption("Message", "-m");
-    }
-}
+Program::Program(InputParser& parser) : parser(parser) {}
 
 const std::string& Program::loadOption(std::string name, std::string prefix) {
     const auto& option = parser.getCmdOption(prefix);
@@ -61,7 +52,7 @@ Crypter_Mode Program::setCrypterMode() {
 Input_Mode Program::setInputMode() {
     bool input_option = parser.cmdOptionExists("-f");
     if(input_option) {
-        auto res = parser.getCmdOption("-f");
+        auto& res = parser.getCmdOption("-f");
         if(!res.empty()) {
             filename = res;
         }
@@ -71,6 +62,14 @@ Input_Mode Program::setInputMode() {
 }
 
 void Program::run() {
+    initwindow(800, 600, "Testing");
+    crypter_mode = setCrypterMode();
+    input_mode   = setInputMode();
+    image        = new Image(loadOption("Image", "-i"));
+    password     = loadOption("Password", "-p");
+    if(crypter_mode == DECRYPT && input_mode == CMD) {
+        message  = loadOption("Message", "-m");
+    }
     std::invoke(crypto_modes[crypter_mode], this);
 }
 

@@ -8,8 +8,8 @@ using namespace std;
 
 int main(int argc, char **argv) {
     InputParser parser(argc, argv);
+    Program program(parser);
     try {
-        Program program(parser);
         program.run();
     }
     catch(std::exception& exp) {

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <functional>
 #include "../image/image.hpp"
 
 class InputParser {
@@ -31,29 +32,30 @@ public:
 private:
     void decrypt();
     void encrypt();
-    typedef void (Program::*CryptoMode)();
+    using CryptoMode = void (Program::*)();
     CryptoMode crypto_modes[2] = {decrypt, encrypt};
 
     std::string fromFile();
     std::string fromConsole();
-    typedef std::string (Program::*ReadMode)();
+    using ReadMode = std::string (Program::*)();
     ReadMode read_modes[2] = {fromFile, fromConsole};
 
     void toFile(std::string encrypted);
     void toConsole(std::string encrypted);
-    typedef void (Program::*WriteMode)(std::string);
+    using WriteMode = void (Program::*)(std::string);
     WriteMode write_modes[2] = {toFile, toConsole};
 
     const std::string& loadOption(std::string name, std::string prefix);
     Crypter_Mode setCrypterMode();
     Input_Mode setInputMode();
 
-    InputParser& parser;
     Crypter_Mode crypter_mode;
-    Input_Mode   input_mode = CMD;
+    Input_Mode   input_mode;
 
     std::string filename;
     std::string password;
     std::string message;
+
+    InputParser& parser;
     Image *image;
 };
