@@ -46,7 +46,7 @@ const std::string& Program::loadOption(std::string name, std::string prefix) {
 }
 
 Crypter_Mode Program::setCrypterMode() {
-    auto option = loadOption("Mode", "-mode");
+    auto& option = loadOption("Mode", "-mode");
     if(option == "decrypt") {
         filename = "input.txt";
         return DECRYPT;
@@ -74,6 +74,14 @@ void Program::run() {
     std::invoke(crypto_modes[crypter_mode], this);
 }
 
+void Program::decrypt() {
+    Decrypter dc(image, password);
+    std::cout << "Image capacity: " << dc.Capacity();
+    std::cout << " characters" << std::endl;
+    dc.decrypt(std::invoke(read_modes[input_mode], this));
+    std::cout << "Message decrypted succesfully!" << std::endl;
+}
+
 std::string Program::fromFile() {
     std::ostringstream buffer;
     std::ofstream file(filename);
@@ -86,12 +94,10 @@ std::string Program::fromConsole() {
     return message;
 }
 
-void Program::decrypt() {
-    Decrypter dc(image, password);
-    std::cout << "Image capacity: " << dc.Capacity();
-    std::cout << " characters" << std::endl;
-    dc.decrypt(std::invoke(read_modes[input_mode], this));
-    std::cout << "Message decrypted succesfully!" << std::endl;
+void Program::encrypt() {
+    Encrypter ec(image, password);
+    std::string encrypted = ec.encrypt();
+    std::invoke(write_modes[input_mode], this, encrypted);
 }
 
 void Program::toFile(std::string encrypted) {
@@ -103,12 +109,6 @@ void Program::toFile(std::string encrypted) {
 void Program::toConsole(std::string encrypted) {
     std::cout << "Encrypted message: ";
     std::cout << encrypted << std::endl;
-}
-
-void Program::encrypt() {
-    Encrypter ec(image, password);
-    std::string encrypted = ec.encrypt();
-    std::invoke(write_modes[input_mode], this, encrypted);
 }
 
 Program::~Program() {
