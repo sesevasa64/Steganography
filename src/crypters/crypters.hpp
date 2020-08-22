@@ -10,8 +10,8 @@ class Loader {
 private:
     Pixels pixels;
     Image *image;
-    std::list<int> indexes;
-    SPixel& getPixel();
+    std::vector<int> indexes;
+    std::vector<int>::iterator start;
 public:
     Pixels& load_pixels();
     Loader(Image *image, std::string password);

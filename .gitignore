@@ -1,3 +1,7 @@
 build
 .vscode
-tiger.bmp
+*.bmp
+*.jpg
+*.png
+input.txt
+output.txt

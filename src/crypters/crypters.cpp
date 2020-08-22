@@ -1,33 +1,30 @@
 #include <iostream>
 #include <cmath>
+#include <algorithm>
+#include <random>
 #include "crypters.hpp"
 
-Loader::Loader(Image *image, std::string password) 
+Loader::Loader(Image *image, std::string password)
 : image(image),
   pixels(pixel_size),
-  indexes(image->Size()) {
-    std::hash<std::string> hash;
-    srand(hash(password));
-    int height = image->Height(), width = image->Width();
+  indexes(image->Size()),
+  start(indexes.begin()) {
+    int height = image->Height();
+    int width = image->Width();
     auto it = indexes.begin();
     for(int y = 0; y < height; y++) {
         for(int x = 0; x < width; x++) {
             (*it++) = y * width + x;
         }
     }
-}
-
-SPixel& Loader::getPixel() {
-    auto it = indexes.begin();
-    std::advance(it, rand() % indexes.size());
-    auto& result = (*image)[*it];
-    indexes.erase(it);
-    return result;
+    std::hash<std::string> hash;
+    std::mt19937 gen(hash(password));
+    std::shuffle(indexes.begin(), indexes.end(), gen);
 }
 
 Pixels& Loader::load_pixels() {
     for(auto& pixel : pixels) {
-        pixel = getPixel();
+        pixel = (*image)[*(start++)];
     }
     return pixels;
 }
@@ -35,9 +32,7 @@ Pixels& Loader::load_pixels() {
 Crypter::Crypter(Image *image, std::string password)
 : image(image),
   capacity(image->Size() * char_per_pixel - chars_in_triad), 
-  loader(image, std::move(password)) {
-      std::cout << "Image capacity: " << capacity << std::endl;
-  }
+  loader(image, std::move(password)) {}
 
 Decrypter::Decrypter(Image *image, std::string password)
 : Crypter(image, std::move(password)),
@@ -70,10 +65,13 @@ Encrypter::Encrypter(Image *image, std::string password)
 
 std::string Encrypter::encrypt() {
     std::string res, temp;
-    while(temp != end) {
+    while(true) {
         auto& pixels = loader.load_pixels();
         triads.push_back(std::make_shared<Triad>(pixels));
         temp = triads.back()->encrypt();
+        if(temp == end) {
+            break;
+        }
         res += temp;
         if(res.size() > capacity) { // Костыль.... или нет?
             throw std::invalid_argument("Password is incorrect!");

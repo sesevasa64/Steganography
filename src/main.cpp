@@ -1,19 +1,24 @@
 #include <iostream>
-#include <list>
-#include <string>
-#include <vector>
-#include <bitset>
-#include <ctime>
-#include "config.hpp"
-#include "bitstream/bitstream.hpp"
-#include "triad/triad.hpp"
-#include "crypters/crypters.hpp"
-#include "image/image.hpp"
-#include "point/point.hpp"
+#include <fstream>
+#include <algorithm>
+#include "program/program.hpp"
 #include "../lib/winbgim.hpp"
 
 using namespace std;
 
+int main(int argc, char **argv) {
+    InputParser parser(argc, argv);
+    try {
+        Program program(parser);
+        program.run();
+    }
+    catch(std::exception& exp) {
+        cout << exp.what() << endl;
+    }
+    return 0;
+}
+
+/*
 template<typename T>
 void input(T& value) {
     while(true) {
@@ -33,7 +38,8 @@ void input(string& value) {
     getline(cin, value);
 }
 
-void test();
+string decrypt_from_file();
+void encrypt_to_file(string& message);
 
 int main() {
     initwindow(800, 600);
@@ -60,18 +66,38 @@ int main() {
         try {
             message = ec.encrypt();
         } catch(std::exception& exp) {
-            cout << "Wrong password!" << endl;
+            cout << exp.what() << endl;
             return -1;
         }
-        cout << "Encrypted message: ";
-        cout << message << endl;
+        cout << "Do you want save message to file? (0 - No, 1 - Yes)" << endl;
+        bool stream;
+        input(stream);
+        if(stream) {
+            encrypt_to_file(message);
+            cout << "Message encrypted succesfully!" << endl;
+        }
+        else {
+            cout << "Encrypted message: ";
+            cout << message << endl;
+        }
     }
     else {
         Decrypter dc(image, password);
-        cout << "Decrypted message: ";
+        cout << "Image capacity: " << dc.Capacity() << " characters" << endl;
+        cout << "Do you want load message from file? (0 - No, 1 - Yes)" << endl;
+        cout << "Answer: ";
         string message;
-        input(message);
-        dc.decrypt(message);
+        bool stream;
+        input(stream);
+        if(stream) {
+            message = decrypt_from_file();
+        }
+        else {
+            cout << "Decrypted message: ";
+            string message;
+            input(message);
+            dc.decrypt(message);
+        }
         cout << "Message decrypted succesfully!";
     }
     delete image;
@@ -79,30 +105,23 @@ int main() {
     return 0;
 }
 
-int get_random(std::list<int>& ls) {
-    std::list<int>::iterator it = ls.begin();
-    std::advance(it, rand() % ls.size());
-    int result = *it;
-    ls.erase(it);
-    return result;
-}   
-
-void test() {
-    //srand(time(0));
-    std::list<int> ls(12);
-    std::list<int>::iterator it = ls.begin();
-    int height = 3, width = 4;
-    for(int y = 0; y < height; y++) {
-        for(int x = 0; x < width; x++) {
-            *(it++) = y * width + x; 
-        }
-    }
-    for(auto it = ls.begin(); it != ls.end(); it++) {
-        cout << *it << ' ';
-    }
-    cout << endl;
-    for(int i = 0; i < 12; i++) {
-        cout << get_random(ls) << ' ';
-    }
-    cout << endl;
+string decrypt_from_file() {
+    string name;
+    cout << "Input file name: ";
+    input(name);
+    ostringstream buf;
+    ifstream file(name);
+    buf << file.rdbuf();
+    file.close();
+    return buf.str();
 }
+
+void encrypt_to_file(string& message) {
+    string name;
+    cout << "Input file name: ";
+    input(name);
+    ofstream file(name);
+    file << message;
+    file.close();
+}
+*/

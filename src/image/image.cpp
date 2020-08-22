@@ -4,13 +4,10 @@
 Image::Image(std::string name) : name(name) {
     image = loadBMP(name.c_str());
     if(!image) {
-        std::cout << "Cant load image!" << std::endl;
-        throw std::bad_exception();
+        throw std::invalid_argument("Cant load image!");
     }
     height = imageheight(image);
     width  = imagewidth(image);
-    //std::cout << "Image Height: " << height << std::endl;
-    //std::cout << "Image Width: "  << width  << std::endl;
     pixels = Pixels(height * width);
     for(int y = 0; y < height; y++) {
         for(int x = 0; x < width; x++) {
@@ -19,7 +16,7 @@ Image::Image(std::string name) : name(name) {
             pixels[y * width + x] = std::make_shared<Pixel>(pos, color);
         }
     }
-    //std::cout << "Image loaded succesfully" << std::endl;
+    printf("Image %s %dx%d loaded succecfully!\n", name.c_str(), height, width);
 }
 
 Image::~Image() {
@@ -46,7 +43,6 @@ void Image::update() {
             int cur_color = pixels[y * width + x]->getColor();
             if(old_color != cur_color) {
                 imageputpixel(image, x, y, cur_color);
-                //std::cout << "Position: " << j << ", " << i << std::endl;
             }
         }
     }
