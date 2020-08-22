@@ -84,7 +84,7 @@ void Program::decrypt() {
 
 std::string Program::fromFile() {
     std::ostringstream buffer;
-    std::ofstream file(filename);
+    std::ifstream file(filename);
     buffer << file.rdbuf();
     file.close();
     return buffer.str();
@@ -98,11 +98,12 @@ void Program::encrypt() {
     Encrypter ec(image, password);
     std::string encrypted = ec.encrypt();
     std::invoke(write_modes[input_mode], this, encrypted);
+    std::cout << "Message encrypted succesfully!" << std::endl;
 }
 
 void Program::toFile(std::string encrypted) {
-    std::ifstream file(filename);
-    file >> encrypted;
+    std::ofstream file(filename);
+    file << encrypted;
     file.close();
 }
 

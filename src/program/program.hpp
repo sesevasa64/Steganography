@@ -31,12 +31,12 @@ public:
 private:
     void decrypt();
     void encrypt();
-    typedef void (Program::*CryptoMode)(void);
+    typedef void (Program::*CryptoMode)();
     CryptoMode crypto_modes[2] = {decrypt, encrypt};
 
     std::string fromFile();
     std::string fromConsole();
-    typedef std::string (Program::*ReadMode)(void);
+    typedef std::string (Program::*ReadMode)();
     ReadMode read_modes[2] = {fromFile, fromConsole};
 
     void toFile(std::string encrypted);
